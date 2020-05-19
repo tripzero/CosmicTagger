@@ -316,6 +316,10 @@ The most commonly used commands are:
             default ="log/",
             help    ="Prefix (directory) for logging information")
 
+        parser.add_argument('--device',
+            default='cpu',
+            help    = "Compute device")
+
 
         ##################################################################
         # Parameters to control framework options

@@ -88,10 +88,7 @@ class torch_trainer(trainercore):
         if self.args.mixed_precision:
             self._net.half()
 
-        if self.args.compute_mode == "CPU":
-            pass
-        if self.args.compute_mode == "GPU":
-            self._net.cuda()
+        self._net.to(self.args.device)
 
         self.loss_calculator = LossCalculator.LossCalculator(self.args.loss_balance_scheme)
 
@@ -204,7 +201,7 @@ class torch_trainer(trainercore):
             for state in self._opt.state.values():
                 for k, v in state.items():
                     if torch.is_tensor(v):
-                        state[k] = v.cuda()
+                        state[k] = v.to(self.args.device)
 
         return True
 
@@ -485,7 +482,7 @@ class torch_trainer(trainercore):
         # Convert the input data to torch tensors
         if self.args.compute_mode == "GPU":
             if device is None:
-                device = torch.device('cuda')
+                device = torch.device(self.args.device)
         else:
             if device is None:
                 device = torch.device('cpu')
